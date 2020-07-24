@@ -15,11 +15,12 @@ module CmChallenge
             end
         end
         cal.publish
+        cal
       end
 
       def summary(user_id,type)
         member_record = CmChallenge::Api.members.find { |record| record[:user_id]==user_id } 
-        type == "vacation" ? member_record[:name] + " is on vacation" : member_record[:name] + " is sick"
+        type == 'vacation' ? member_record[:name] + ' is on vacation' : member_record[:name] + ' is sick'
       end
   end
 end
