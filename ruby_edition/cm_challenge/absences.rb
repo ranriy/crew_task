@@ -3,9 +3,14 @@ require_relative './api'
 
 module CmChallenge
   class Absences
+      def initialize
+        @absences = CmChallenge::Api.absences
+        @members = CmChallenge::Api.members
+      end
+
       def to_ical
         cal = Icalendar::Calendar.new
-        CmChallenge::Api.absences.each do |record|
+        @absences.each do |record|
             cal.event do |e|
               e.dtstart     = Icalendar::Values::Date.new(record[:start_date].tr('-',''))
               e.dtend       = Icalendar::Values::Date.new(record[:end_date].tr('-',''))
@@ -19,8 +24,12 @@ module CmChallenge
       end
 
       def summary(user_id,type)
-        member_record = CmChallenge::Api.members.find { |record| record[:user_id]==user_id } 
+        member_record = @members.find { |record| record[:user_id]==user_id } 
         type == 'vacation' ? member_record[:name] + ' is on vacation' : member_record[:name] + ' is sick'
+      end
+
+      def user_absences(user_id)
+        @absences = @absences.select { |record| record[:user_id]==user_id.to_i }
       end
   end
 end
