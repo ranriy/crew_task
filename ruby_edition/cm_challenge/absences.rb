@@ -31,5 +31,9 @@ module CmChallenge
       def user_absences(user_id)
         @absences = @absences.select { |record| record[:user_id]==user_id.to_i }
       end
+
+      def date_range(start_date,end_date)
+        @absences = @absences.select { |record| Date.parse(record[:start_date])>= Date.parse(start_date) and Date.parse(record[:end_date])<=Date.parse(end_date) }
+      end
   end
 end
